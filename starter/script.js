@@ -6,17 +6,10 @@ const countriesContainer = document.querySelector('.countries');
 ///////////////////////////////////////
 ////////OLD WAY TO DO IT IN JS
 
-const getCountryData = function (country) {
-  const request = new XMLHttpRequest();
-  request.open('GET', `https://restcountries.eu/rest/v2/name/${country}`);
-  request.send();
-
-  request.addEventListener('load', function () {
-    const [data] = JSON.parse(this.responseText);
-    console.log(data);
-    // To convert to a number add+ in front of the number
-    const html = `
-  <article class="country">
+const renderCountry = function (data, className = '') {
+  // To convert to a number add+ in front of the number
+  const html = `
+  <article class="country ${className}">
           <img class="country__img" src="${data.flag}" />
           <div class="country__data">
             <h3 class="country__name">${data.name}</h3>
@@ -33,11 +26,39 @@ const getCountryData = function (country) {
         </article>
         `;
 
-    countriesContainer.insertAdjacentHTML('beforeend', html);
-    countriesContainer.style.opacity = 1;
+  countriesContainer.insertAdjacentHTML('beforeend', html);
+  countriesContainer.style.opacity = 1;
+};
+
+const getCountryAndNeighbor = function (country) {
+  //AJAX Call con=untry 1
+  const request = new XMLHttpRequest();
+  request.open('GET', `https://restcountries.eu/rest/v2/name/${country}`);
+  request.send();
+
+  request.addEventListener('load', function () {
+    const [data] = JSON.parse(this.responseText);
+    console.log(data);
+    //render country 1
+    renderCountry(data);
+
+    //get the neighboring countries
+    const [neighbour] = data.borders;
+
+    if (!neighbour) return;
+
+    //AJAX Call con=untry 2
+    const request2 = new XMLHttpRequest();
+    request2.open('GET', `https://restcountries.eu/rest/v2/alpha/${neighbour}`);
+    request2.send();
+
+    request2.addEventListener('load', function () {
+      const data2 = JSON.parse(this.responseText);
+      console.log(data2);
+      //render country 1
+      renderCountry(data2, 'neighbour');
+    });
   });
 };
 
-getCountryData('cote');
-getCountryData('usa');
-getCountryData('portugal');
+getCountryAndNeighbor('usa');
