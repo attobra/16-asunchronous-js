@@ -29,7 +29,7 @@ const renderCountry = function (data, className = '') {
   countriesContainer.insertAdjacentHTML('beforeend', html);
   countriesContainer.style.opacity = 1;
 };
-
+/*
 const getCountryAndNeighbor = function (country) {
   //AJAX Call con=untry 1
   const request = new XMLHttpRequest();
@@ -62,3 +62,28 @@ const getCountryAndNeighbor = function (country) {
 };
 
 getCountryAndNeighbor('usa');
+*/
+
+//////////FETCH NEW WAY TO CALL API /////////////
+// const request = fetch('https://restcountries.eu/rest/v2/name/portugal');
+// console.log(request);
+
+// const getCountryData = function (country) {
+//   fetch(`https://restcountries.eu/rest/v2/name/${country}`)
+//     .then(function (response) {
+//       console.log(response);
+//       //response.json() is a new promise
+//       return response.json();
+//     })
+//     .then(function (data) {
+//       console.log(data);
+//       renderCountry(data[0]);
+//     });
+// };
+
+const getCountryData = function (country) {
+  fetch(`https://restcountries.eu/rest/v2/name/${country}`)
+    .then(response => response.json())
+    .then(data => renderCountry(data[0]));
+};
+getCountryData('portugal');
