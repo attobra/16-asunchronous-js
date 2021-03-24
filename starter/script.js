@@ -2,9 +2,13 @@
 
 const btn = document.querySelector('.btn-country');
 const countriesContainer = document.querySelector('.countries');
+////////////////////////////////////////
+const renderError = function (msg) {
+  countriesContainer.insertAdjacentText('beforeend', msg);
+  //countriesContainer.style.opacity = 1;
+};
 
 ///////////////////////////////////////
-////////OLD WAY TO DO IT IN JS
 
 const renderCountry = function (data, className = '') {
   // To convert to a number add+ in front of the number
@@ -27,7 +31,7 @@ const renderCountry = function (data, className = '') {
         `;
 
   countriesContainer.insertAdjacentHTML('beforeend', html);
-  countriesContainer.style.opacity = 1;
+  //   countriesContainer.style.opacity = 1;
 };
 /*
 const getCountryAndNeighbor = function (country) {
@@ -81,10 +85,22 @@ getCountryAndNeighbor('usa');
 //     });
 // };
 
+const getJSON = function (url, errorMsg = 'Something went wrong') {
+  return fetch(url).then(response => {
+    if (!response.ok) throw new Error(`${errorMsg} Error ${response.status}`);
+    return response.json();
+  });
+};
+/*
 const getCountryData = function (country) {
   //country 1
   fetch(`https://restcountries.eu/rest/v2/name/${country}`)
-    .then(response => response.json())
+    .then(response => {
+      console.log(response);
+
+      if (!response.ok) throw new Error(`Country not found ${response.status}`);
+      return response.json();
+    })
     .then(data => {
       renderCountry(data[0]);
       const neighbour = data[0].borders[0];
@@ -97,6 +113,50 @@ const getCountryData = function (country) {
     .then(response => response.json())
     .then(data => {
       renderCountry(data, 'neighbour');
+    })
+    .catch(err => {
+      console.error(`${err} 💥💥💥`);
+      renderError(`Something went wrong! ${err.message} 💥💥`);
+    })
+    .finally(() => {
+      countriesContainer.style.opacity = 1;
     });
 };
-getCountryData('lebanon');
+*/
+/*
+const getCountryData = function (country) {
+  //country 1
+  getJSON(
+    `https://restcountries.eu/rest/v2/name/${country}`,
+    'Country not found'
+  )
+    .then(data => {
+      renderCountry(data[0]);
+      const neighbour = data[0].borders[0];
+
+      if (!neighbour) throw new Error('No neighbour found');
+
+      //country 2
+      return getJSON(
+        `https://restcountries.eu/rest/v2/alpha/${neighbour}`,
+        'Country not found'
+      );
+    })
+    .then(data => {
+      renderCountry(data, 'neighbour');
+    })
+    .catch(err => {
+      console.error(`${err} 💥💥💥`);
+      renderError(`Something went wrong! ${err.message} 💥💥`);
+    })
+    .finally(() => {
+      countriesContainer.style.opacity = 1;
+    });
+};
+
+btn.addEventListener('click', function () {
+  getCountryData('portugal');
+});
+
+getCountryData('australia');
+*/
