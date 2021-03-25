@@ -161,9 +161,9 @@ btn.addEventListener('click', function () {
 getCountryData('australia');
 */
 
-/////////////////////////////
+/////////////////////BEGINNING////////
 ///CODING CHALLENGE #1
-
+/*
 const whereAmI = function (lat, lng) {
   fetch(`https://geocode.xyz/${lat},${lng}?geoit=json `)
     .then(res => {
@@ -190,5 +190,26 @@ const whereAmI = function (lat, lng) {
 whereAmI(52.508, 13.381);
 whereAmI(19.037, 72.873);
 whereAmI(-33.933, 18.474);
-
+*/
 //https://geocode.xyz/53.508,13.381?geoit=json.
+//////////// END ////////////////////
+
+////////////////////////// Event Loops //////////////////
+/* console.log('Test starts');
+setTimeout(() => console.log('0 sec timer'), 0);
+Promise.resolve('Resolved Promise 1').then(res => console.log(res));
+console.log('Test end');
+*/
+//////////// SIMPLE PROMISE ///////////
+const lotteryPromise = new Promise(function (resolve, reject) {
+  console.log('the lottery is happening now 🔮');
+  setTimeout(function () {
+    if (Math.random() >= 0.5) {
+      resolve('You WIN 💰');
+    } else {
+      reject(new Error('you lost your money 💩'));
+    }
+  }, 2000);
+});
+
+lotteryPromise.then(res => console.log(res)).catch(err => console.error(err));
