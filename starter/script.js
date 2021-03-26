@@ -237,7 +237,7 @@ wait(1)
   });
 */
 
-/////////promisifying the geolocation API callback based unto a promise based API
+/////////PROMISIFYING THE GEOLOCATION API callback based unto a promise based API
 /*
 console.log('Getting Position');
 const getPosition = function () {
@@ -281,6 +281,8 @@ btn.addEventListener('click', whereAmI);
 */
 
 /////////////////////////////CODING CHALLENGE 2 //////////////////
+
+/*
 const imgContainer = document.querySelector('.images');
 
 const createImage = function (imgPath) {
@@ -324,3 +326,31 @@ createImage('img/img-1.jpg')
     currentImg.style.display = 'none';
   })
   .catch(err => console.error(err));
+
+*/
+
+/////////////////////ASYNC AWAIT //////////////////
+const getPosition = function () {
+  return new Promise(function (resolve, reject) {
+    navigator.geolocation.getCurrentPosition(resolve, reject);
+  });
+};
+
+const whereAmI = async function () {
+  //Geolocation
+  const pos = await getPosition();
+  const { latitude: lat, longitude: lng } = pos.coords;
+  //reverse geocoding
+  const resGeo = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json `);
+  const dataGeo = await resGeo.json();
+  const country = dataGeo.country;
+  //country data
+  const res = await fetch(`https://restcountries.eu/rest/v2/name/${country}`);
+  console.log(res);
+  const data = await res.json();
+  console.log(data[0]);
+  renderCountry(data[0]);
+};
+
+whereAmI();
+console.log('FIRST');
