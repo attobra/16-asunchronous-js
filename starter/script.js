@@ -337,19 +337,26 @@ const getPosition = function () {
 };
 
 const whereAmI = async function () {
-  //Geolocation
-  const pos = await getPosition();
-  const { latitude: lat, longitude: lng } = pos.coords;
-  //reverse geocoding
-  const resGeo = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json `);
-  const dataGeo = await resGeo.json();
-  const country = dataGeo.country;
-  //country data
-  const res = await fetch(`https://restcountries.eu/rest/v2/name/${country}`);
-  console.log(res);
-  const data = await res.json();
-  console.log(data[0]);
-  renderCountry(data[0]);
+  try {
+    //Geolocation
+    const pos = await getPosition();
+    const { latitude: lat, longitude: lng } = pos.coords;
+
+    //reverse geocoding
+    const resGeo = await fetch(`https://geocode.xyz/${lat},${lng}?geoit=json `);
+    if (!resGeo.ok) throw new Error('Problem getting location data');
+    const dataGeo = await resGeo.json();
+    const country = dataGeo.country;
+
+    //country data
+    const res = await fetch(`https://restcountries.eu/rest/v2/name/${country}`);
+    if (!res.ok) throw new Error('problem getting country');
+    const data = await res.json();
+    renderCountry(data[0]);
+  } catch (err) {
+    console.error(` 😫 ${err} 😫`);
+    renderError(`what? ${err.message}`);
+  }
 };
 
 whereAmI();
