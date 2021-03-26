@@ -201,6 +201,7 @@ Promise.resolve('Resolved Promise 1').then(res => console.log(res));
 console.log('Test end');
 */
 //////////// SIMPLE PROMISE ///////////
+/*
 const lotteryPromise = new Promise(function (resolve, reject) {
   console.log('the lottery is happening now 🔮');
   setTimeout(function () {
@@ -213,3 +214,25 @@ const lotteryPromise = new Promise(function (resolve, reject) {
 });
 
 lotteryPromise.then(res => console.log(res)).catch(err => console.error(err));
+
+//promisify the settimeout function
+
+const wait = function (seconds) {
+  return new Promise(function (resolve) {
+    setTimeout(resolve, seconds * 1000);
+  });
+};
+
+wait(1)
+  .then(() => {
+    console.log('I waited for 1 seconds');
+    return wait(1);
+  })
+  .then(() => {
+    console.log('I waited for 1 second');
+    return wait(2);
+  })
+  .then(() => {
+    console.log('I waited for 2 more seconds');
+  });
+*/
