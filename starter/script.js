@@ -353,6 +353,8 @@ const whereAmI = async function () {
     if (!res.ok) throw new Error('problem getting country');
     const data = await res.json();
     renderCountry(data[0]);
+
+    return ` the city is ${dataGeo.city} and the country is ${country}`;
   } catch (err) {
     console.error(` 😫 ${err} 😫`);
     renderError(`what? ${err.message}`);
@@ -360,4 +362,21 @@ const whereAmI = async function () {
 };
 
 whereAmI();
-console.log('FIRST');
+console.log('1: will get location');
+
+/////WITH THEN ///
+// whereAmI()
+// .then(city => console.log(`2: ${city}`) )
+// .catch(err => console.error(`2:${err.message}`)
+// .finally(()=> console.log(`3: Finished getting location`))
+
+///////with async await /////
+(async function () {
+  try {
+    const city = await whereAmI();
+    console.log(`2: ${city}`);
+  } catch (err) {
+    console.error(`2:${err.message}`);
+  }
+  console.log(`3: Finished getting location`);
+})();
